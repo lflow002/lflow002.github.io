@@ -69,8 +69,16 @@
             padding: 2rem;
             text-align: center;
             box-sizing: border-box;
+            /* Added for fade-in/out effect */
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
         
+        /* Class to make the section visible */
+        .section.visible {
+            opacity: 1;
+        }
+
         /* Unique background colors for each section */
         #about { background-color: #fff; }
         #research { background-color: #f1f3f5; }
@@ -159,6 +167,30 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // Intersection Observer for the fade-in effect
+        const sections = document.querySelectorAll('.section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5 // Trigger when 50% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Attach the observer to each section
+        sections.forEach(section => {
+            observer.observe(section);
         });
     </script>
 
